@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0D0D0D;
+  --bg-surface: #1A1A1A;
+  --bg-admin: #141414;
+  --border-gold: #C9A84C;
+  --gold: #B8860B;
+  --gold-light: #FFD700;
+  --text-primary: #F0F0F0;
+  --text-muted: #888888;
+  --ivory: #FAF8F0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Custom Scrollbar for sleek dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-gold);
+}
+
+/* Base interactive elements transition setup */
+a,
+button,
+input,
+textarea,
+select {
+  transition: all 300ms ease;
+}
+
+/* React Quill Dark Mode Overrides */
+.ql-toolbar {
+  background: var(--bg-surface);
+  border-color: #333 !important;
+}
+
+.ql-container {
+  min-height: 200px;
+  border-color: #333 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 1rem !important;
+}
+
+.ql-editor {
+  color: var(--text-primary);
+}
+
+.ql-stroke {
+  stroke: var(--text-primary) !important;
+}
+
+.ql-fill {
+  fill: var(--text-primary) !important;
+}
+
+.ql-picker-label {
+  color: var(--text-primary) !important;
+}
+
+/* Utilities for cards and inputs to be used with Tailwind */
+@layer components {
+  .lux-card {
+    @apply bg-[#1A1A1A] border border-[#C9A84C]/30 rounded-lg overflow-hidden transition-all duration-300;
+  }
+
+  .lux-card:hover {
+    @apply border-[#C9A84C] shadow-[0_4px_20px_#C9A84C26];
+  }
+
+  .lux-button-primary {
+    @apply px-6 py-2 border border-[#C9A84C] text-[#C9A84C] bg-transparent rounded hover:bg-[#C9A84C] hover:text-[#0D0D0D] font-medium tracking-wide transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .lux-button-danger {
+    @apply px-6 py-2 border border-red-800 text-red-500 bg-transparent rounded hover:bg-red-900 hover:text-white font-medium tracking-wide transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .lux-input {
+    @apply w-full bg-[#1A1A1A] border border-gray-800 rounded px-4 py-2 text-[#F0F0F0] focus:outline-none focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C] transition-all;
+  }
+
+  .lux-label {
+    @apply block text-sm font-medium text-[#888888] mb-1;
+  }
+}
