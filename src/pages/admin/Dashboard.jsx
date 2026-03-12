@@ -8,7 +8,8 @@ const Dashboard = () => {
         activeListings: 0,
         newInquiries: 0,
         totalInviteCodes: 0,
-        codesUsedToday: 0
+        codesUsedToday: 0,
+        pendingInviteRequests: 0
     });
     const [recentInquiries, setRecentInquiries] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,21 +17,23 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const [listingsRes, inquiriesRes, codesRes] = await Promise.all([
+                const [listingsRes, inquiriesRes, codesRes, requestsRes] = await Promise.all([
                     api.get('/listings/admin/all'),
                     api.get('/inquiries/admin'),
-                    api.get('/admin/invite-codes')
+                    api.get('/admin/invite-codes'),
+                    api.get('/invite-requests/admin')
                 ]);
 
                 const activeListings = listingsRes.data.filter(l => l.status === 'active').length;
                 const newInquiries = inquiriesRes.data.filter(i => i.status === 'new').length;
                 const totalCodes = codesRes.data.length;
+                const pendingInviteRequests = requestsRes.data.data.filter(r => r.status === 'pending').length;
 
                 // Very basic mock heuristic for today, since we don't track exact "used" time.
                 // If it's used > 0 we'll count it. A real backend would need usage logs.
                 const codesUsedToday = codesRes.data.filter(c => c.usageCount > 0).length;
 
-                setStats({ activeListings, newInquiries, totalInviteCodes: totalCodes, codesUsedToday });
+                setStats({ activeListings, newInquiries, totalInviteCodes: totalCodes, codesUsedToday, pendingInviteRequests });
                 setRecentInquiries(inquiriesRes.data.slice(0, 10)); // Just took top 10
 
             } catch (error) {
@@ -70,10 +73,11 @@ const Dashboard = () => {
                 </div>
             ) : (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
                         <StatCard title="Active Listings" value={stats.activeListings} icon={FiTrendingUp} colorClass="bg-blue-900/30 text-blue-500" />
                         <StatCard title="New Inquiries" value={stats.newInquiries} icon={FiAlertCircle} colorClass="bg-red-900/30 text-red-500" />
                         <StatCard title="Total Invites" value={stats.totalInviteCodes} icon={FiKey} colorClass="bg-purple-900/30 text-purple-500" />
+                        <StatCard title="Invite Requests" value={stats.pendingInviteRequests} icon={FiUsers} colorClass="bg-orange-900/30 text-orange-500" />
                         <StatCard title="Usage Count" value={stats.codesUsedToday} icon={FiUsers} colorClass="bg-green-900/30 text-green-500" />
                     </div>
 
@@ -100,17 +104,17 @@ const Dashboard = () => {
                                             <td className="px-6 py-4">{inquiry.name}</td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-2 py-1 rounded text-xs font-medium uppercase tracking-wider border ${inquiry.requestType === 'purchase'
-                                                        ? 'bg-[#0D0D0D] text-[#C9A84C] border-[#C9A84C]'
-                                                        : 'bg-[#1A1A1A] text-gray-300 border-gray-600'
+                                                    ? 'bg-[#0D0D0D] text-[#C9A84C] border-[#C9A84C]'
+                                                    : 'bg-[#1A1A1A] text-gray-300 border-gray-600'
                                                     }`}>
                                                     {inquiry.requestType}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-2 py-1 rounded text-xs font-medium uppercase tracking-wider ${inquiry.status === 'new' ? 'bg-red-900/30 text-red-400 border border-red-800' :
-                                                        inquiry.status === 'reviewed' ? 'bg-blue-900/30 text-blue-400 border border-blue-800' :
-                                                            inquiry.status === 'in-progress' ? 'bg-yellow-900/30 text-yellow-500 border border-yellow-800' :
-                                                                'bg-green-900/30 text-green-400 border border-green-800'
+                                                    inquiry.status === 'reviewed' ? 'bg-blue-900/30 text-blue-400 border border-blue-800' :
+                                                        inquiry.status === 'in-progress' ? 'bg-yellow-900/30 text-yellow-500 border border-yellow-800' :
+                                                            'bg-green-900/30 text-green-400 border border-green-800'
                                                     }`}>
                                                     {inquiry.status}
                                                 </span>

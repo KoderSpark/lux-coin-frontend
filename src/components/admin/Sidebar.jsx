@@ -6,6 +6,7 @@ import {
     FiList,
     FiKey,
     FiMessageSquare,
+    FiUserPlus,
     FiLogOut
 } from 'react-icons/fi';
 
@@ -23,6 +24,7 @@ const Sidebar = () => {
         { name: 'Listings', path: '/admin/listings', icon: FiList },
         { name: 'Invite Codes', path: '/admin/invite-codes', icon: FiKey },
         { name: 'Inquiries', path: '/admin/inquiries', icon: FiMessageSquare },
+        { name: 'Invite Requests', path: '/admin/invite-requests', icon: FiUserPlus },
     ];
 
     return (
